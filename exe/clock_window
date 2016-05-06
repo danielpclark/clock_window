@@ -1,0 +1,17 @@
+#!/usr/bin/env ruby
+
+require 'neatjson'
+@hash = {}
+begin
+  loop do
+    sleep 15
+    x = `xprop -id $(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2) _NET_WM_NAME`
+    x = x.match(/.*\"(.*)\"\n\z/)[1][0..60]
+    @hash[x] = @hash[x].to_f + 0.25
+  end
+ensure
+  @hash = {"*---------- WINDOW NAME ----------*" => "minutes"}.merge(@hash)
+  File.open("timelog.json","w") do |f|
+    f.write(JSON.neat_generate(@hash,aligned:true,around_colon:1))
+  end
+end
