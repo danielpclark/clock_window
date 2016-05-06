@@ -1,12 +1,13 @@
 #!/usr/bin/env ruby
 
+require 'neatjson'
 require 'clock_window'
 @hash = {}
 begin
   loop do
-    sleep 15
     x = ClockWindow::ClockIt.new.active_window
     @hash[x] = @hash[x].to_f + 0.25
+    sleep 15
   end
 ensure
   @hash = {"*---------- WINDOW NAME ----------*" => "minutes"}.merge(@hash)
