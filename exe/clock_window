@@ -1,12 +1,11 @@
 #!/usr/bin/env ruby
 
-require 'neatjson'
+require 'clock_window'
 @hash = {}
 begin
   loop do
     sleep 15
-    x = `xprop -id $(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2) _NET_WM_NAME`
-    x = x.match(/.*\"(.*)\"\n\z/)[1][0..60]
+    x = ClockWindow::ClockIt.new.active_window
     @hash[x] = @hash[x].to_f + 0.25
   end
 ensure
