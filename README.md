@@ -1,4 +1,4 @@
-# Clock Window script
+# Clock Window
 A minimalist script to keep track of how long each window is active.  Measured in quarter minutes.  Hash builds until you kill the script with CTRL-C at which point it writes out the log file.  This script <del>adds no extra CPU load</del> will not raise the CPUs temperature indicating minimal CPU usage.
 
 The output will look quite nice in any text editor aligned by the colon separator.
@@ -23,6 +23,10 @@ gem install clock_window
 ```
 
 To execute just run `clock_window` .  If you put this script in your executable path then the **timelog.json** file should appear in whatever folder you run it from.
+
+# Contributing
+
+Feel free to contribute!  We're looking for additional OS support by people who use different operating systems.
 
 ## The MIT License (MIT)
 Copyright (c) 2016 Daniel P. Clark
