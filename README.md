@@ -1,3 +1,5 @@
+[![Code Triagers Badge](http://www.codetriage.com/danielpclark/clock_window/badges/users.svg)](http://www.codetriage.com/danielpclark/clock_window)
+
 # Clock Window
 A minimalist script to keep track of how long each window is active.  Measured in quarter minutes.  Hash builds until you kill the script with CTRL-C at which point it writes out the log file.  This script <del>adds no extra CPU load</del> will not raise the CPUs temperature indicating minimal CPU usage.
 
