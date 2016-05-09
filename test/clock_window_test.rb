@@ -12,7 +12,9 @@ class ClockWindowTest < Minitest::Test
     end
 
     it "returns the correct string for the Linux OS" do
-      _(linux.active_window.first).must_equal "xprop -id $(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2) _NET_WM_NAME"
+      exe, format = linux.active_window
+      _(exe).must_equal "xprop -id $(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2) _NET_WM_NAME"
+      _(format.call("_NET_WM_NAME(UTF8_STRING) = \"user@computer: ~\"\n")).must_equal "user@computer: ~"
     end
   end
 end
