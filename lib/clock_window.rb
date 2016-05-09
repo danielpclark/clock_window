@@ -17,7 +17,7 @@ module ClockWindow
     # As this will get more sophisticated this class is the Back End
     def initialize
       # Detect operating system
-      @os = "Linux"
+      @os = RbConfig::CONFIG['host_os']
     end
 
     # output will be a two parameter array
@@ -26,7 +26,7 @@ module ClockWindow
     def active_window
       # Choose script to execute and format output to just window name
       case @os
-      when "Linux"
+      when /linux/i 
         exe = "xprop -id $(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2) _NET_WM_NAME"
         format = ->str{ str.match(/.*\"(.*)\"\n\z/)[1][0..60] }
         [exe, format]
