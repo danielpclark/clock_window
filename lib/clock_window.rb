@@ -18,6 +18,7 @@ module ClockWindow
     def initialize
       # Detect operating system
       @os = RbConfig::CONFIG['host_os']
+      @window_title_length = 0..60
     end
 
     # output will be a two parameter array
@@ -28,7 +29,7 @@ module ClockWindow
       case @os
       when /linux/i
         exe = "xprop -id $(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2) _NET_WM_NAME"
-        format = ->str{ str.match(/.*\"(.*)\"\n\z/)[1][0..60] }
+        format = ->str{ str.match(/.*\"(.*)\"\n\z/)[1][@window_title_length] }
         [exe, format]
       when /darwin/i
         exe = <<-SCRIPT
@@ -52,7 +53,7 @@ module ClockWindow
 
         format = ->str {
           app, window = str.split(',')
-          "#{window.strip} - #{app.strip}"[0..60]
+          "#{window.strip} - #{app.strip}"[@window_title_length]
         }
         [exe, format]
       else
