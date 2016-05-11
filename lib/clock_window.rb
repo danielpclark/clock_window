@@ -26,12 +26,37 @@ module ClockWindow
     def active_window
       # Choose script to execute and format output to just window name
       case @os
-      when /linux/i 
+      when /linux/i
         exe = "xprop -id $(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2) _NET_WM_NAME"
         format = ->str{ str.match(/.*\"(.*)\"\n\z/)[1][0..60] }
         [exe, format]
+      when /darwin/i
+        exe = <<-SCRIPT
+          osascript -e '
+            global frontApp, frontAppName, windowTitle
+
+            set windowTitle to ""
+            tell application "System Events"
+              set frontApp to first application process whose frontmost is true
+              set frontAppName to name of frontApp
+              tell process frontAppName
+                  tell (1st window whose value of attribute "AXMain" is true)
+                      set windowTitle to value of attribute "AXTitle"
+                  end tell
+              end tell
+            end tell
+
+            return {frontAppName, windowTitle}
+          '
+        SCRIPT
+
+        format = ->str {
+          app, window = str.split(',')
+          "#{window.strip} - #{app.strip}"[0..60]
+        }
+        [exe, format]
       else
-        raise "Not implemented"
+        raise "Not implemented for #{@os}"
       end
     end
   end
