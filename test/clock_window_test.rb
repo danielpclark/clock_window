@@ -13,6 +13,7 @@ class ClockWindowTest < Minitest::Test
     }
 
     it "is not empty" do
+      skip if ENV['XWINDOWS'] == 'FALSE'
       _(ClockWindow::ClockIt.new.active_window).wont_be :empty?
     end
 
