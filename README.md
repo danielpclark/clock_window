@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.org/danielpclark/clock_window.svg?branch=master)](https://travis-ci.org/danielpclark/clock_window)
 [![Code Triagers Badge](http://www.codetriage.com/danielpclark/clock_window/badges/users.svg)](http://www.codetriage.com/danielpclark/clock_window)
 
 # Clock Window
