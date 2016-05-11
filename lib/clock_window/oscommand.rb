@@ -1,5 +1,6 @@
 module ClockWindow
   class OScommand
+    using Refinements::AddIf
     # As this will get more sophisticated this class is the Back End
     def initialize(**kwargs)
       @filter_opts = kwargs.fetch(:filter_opts) { {} }
@@ -20,9 +21,8 @@ module ClockWindow
 
         # Filters for resulting string
         format = Filters.new(
-          matches: [ Regexp.new(/.*\"(.*)\"\n\z/) ].tap {|arr|
-            arr.insert(-1, *@filter_opts.delete(:matches)) if @filter_opts.has_key? :matches
-          },
+          matches: [ Regexp.new(/.*\"(.*)\"\n\z/) ].
+            add_if(@filter_opts.has_key? :matches){@filter_opts.delete(:matches)},
           **@filter_opts
         )
         [exe, format]
@@ -47,9 +47,8 @@ module ClockWindow
         SCRIPT
 
         format = Filters.new(
-          substitutions: [ [Regexp.new(/([^,]*)[, ]{1,3}(.*)/), '\2 - \1'] ].tap {|arr|
-            arr.insert(-1, *Array(@filter_opts.delete(:substitutions))) if @filter_opts.has_key? :substitutions
-          },
+          substitutions: [ [Regexp.new(/([^,]*)[, ]{1,3}(.*)/), '\2 - \1'] ].
+            add_if(@filter_opts.has_key? :substitutions){@filter_opts.delete(:substitutions)},
           **@filter_opts
         )
         [exe, format]

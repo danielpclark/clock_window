@@ -1,4 +1,5 @@
 require "clock_window/version"
+require "clock_window/refinements"
 require "clock_window/filters"
 require "clock_window/oscommand"
 
