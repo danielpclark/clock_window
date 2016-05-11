@@ -13,12 +13,36 @@ module ClockWindow
     end
   end
 
+  class Filters
+    def initialize(**kwargs)
+      @title_range = kwargs.fetch(:title_range)   { 0..60 }
+      @matches = kwargs.fetch(:matches)           { []    } # [/(thing)/, /(in)/] # each match will be indexed to first match so use parenthesis
+      @subtitutions = kwargs.fetch(:subtitutions) { []    } # [[//,'']]
+    end
+
+    def call(source)
+      apply_filters(source)
+    end
+
+    private
+    def apply_filters(target)
+      @matches.each do |fltr|
+        target = target.match(flter)[1]
+      end
+      @substitutions.each do |a,b|
+        target = target.gsub(a,b)
+      end
+      target[@title_range]
+    end
+  end
+
   class OScommand
     # As this will get more sophisticated this class is the Back End
-    def initialize
+    def initialize(**kwargs)
+      @window_title_length = kwargs.fetch(:title_range) { 0..60 }
+
       # Detect operating system
       @os = RbConfig::CONFIG['host_os']
-      @window_title_length = 0..60
     end
 
     # output will be a two parameter array
