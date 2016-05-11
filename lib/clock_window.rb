@@ -16,8 +16,11 @@ module ClockWindow
   class Filters
     def initialize(**kwargs)
       @title_range = kwargs.fetch(:title_range)   { 0..60 }
-      @matches = kwargs.fetch(:matches)           { []    } # [/(thing)/, /(in)/] # each match will be indexed to first match so use parenthesis
-      @subtitutions = kwargs.fetch(:subtitutions) { []    } # [[//,'']]
+      @lazy_matchers = kwargs.fetch(:lazy_matchers) { true }
+
+      # These are destructive matchers.  String will conform to match data.
+      @matches = Array(kwargs.fetch(:matches)           { [] }) # [/(thing)/, /(in)/] # each match will be indexed to first match so use parenthesis
+      @substitutions = Array(kwargs.fetch(:substitutions) { [] }) # [[//,'']]
     end
 
     def call(source)
@@ -26,13 +29,24 @@ module ClockWindow
 
     private
     def apply_filters(target)
-      @matches.each do |fltr|
-        target = target.match(flter)[1]
-      end
+      target = matchers(target)
       @substitutions.each do |a,b|
         target = target.gsub(a,b)
       end
       target[@title_range]
+    end
+
+    def matchers(target)
+      @matches.each do |fltr|
+        if @lazy_matchers
+          tmp = target.match( Regexp.new(fltr) )
+          tmp = tmp[1] || tmp[0] if tmp.is_a? MatchData
+          target = tmp || target 
+        else
+          target = target[Regexp.new(fltr)].to_s
+        end
+      end
+      target
     end
   end
 
@@ -52,8 +66,14 @@ module ClockWindow
       # Choose script to execute and format output to just window name
       case @os
       when /linux/i
+        # Linux command to execute
         exe = "xprop -id $(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2) _NET_WM_NAME"
-        format = ->str{ str.match(/.*\"(.*)\"\n\z/)[1][@window_title_length] }
+
+        # Filters for resulting string
+        format = Filters.new(
+          title_range: @window_title_length,
+          matches: [ Regexp.new(/.*\"(.*)\"\n\z/) ]
+        )
         [exe, format]
       when /darwin/i
         exe = <<-SCRIPT
