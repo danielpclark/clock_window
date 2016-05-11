@@ -26,5 +26,10 @@ class ClockWindowTest < Minitest::Test
       _, format = mac.active_window
       _(format.call("Firefox, (1337) Twitter")).must_equal "(1337) Twitter - Firefox"
     end
+
+    it "crops to the default" do
+      _, format = linux.active_window
+      _(format.call("*"*80)).must_equal "*"*61
+    end
   end
 end

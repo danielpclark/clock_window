@@ -31,5 +31,10 @@ class ClockWindow::FiltersTest < Minitest::Test
       _(format.call("(1337) Twitter - Firefox")).must_equal "Fire"
     end
 
+    it "filters a custom range" do
+      osc = ClockWindow::ClockIt.new(filter_opts: {title_range: 0..4}).instance_eval { @os_cmd }
+      osc.instance_eval { @os = "linux-gnu" }
+      _(osc.active_window.last.call("1234567890")).must_equal "12345"
+    end
   end
 end
