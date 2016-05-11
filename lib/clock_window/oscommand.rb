@@ -42,13 +42,13 @@ module ClockWindow
               end tell
             end tell
 
-            return {frontAppName, windowTitle}
+            return windowTitle & " - " & frontAppName
           '
         SCRIPT
 
         format = Filters.new(
-          substitutions: [ [Regexp.new(/([^,]*)[, ]{1,3}(.*)/), '\2 - \1'] ].
-            add_if(@filter_opts.has_key? :substitutions){@filter_opts.delete(:substitutions)},
+          matches: [ Regexp.new(/(.*)\n/) ].
+            add_if(@filter_opts.has_key? :matches){@filter_opts.delete(:matches)},
           **@filter_opts
         )
         [exe, format]
