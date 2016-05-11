@@ -2,7 +2,6 @@ module ClockWindow
   class OScommand
     # As this will get more sophisticated this class is the Back End
     def initialize(**kwargs)
-      @window_title_length = kwargs.fetch(:title_range) { 0..60 }
       @filter_opts = kwargs.fetch(:filter_opts) { {} }
 
       # Detect operating system
@@ -21,7 +20,6 @@ module ClockWindow
 
         # Filters for resulting string
         format = Filters.new(
-          title_range: @window_title_length,
           matches: [ Regexp.new(/.*\"(.*)\"\n\z/) ].tap {|arr|
             arr.insert(-1, *@filter_opts.delete(:matches)) if @filter_opts.has_key? :matches
           },
@@ -49,7 +47,6 @@ module ClockWindow
         SCRIPT
 
         format = Filters.new(
-          title_range: @window_title_length,
           substitutions: [ [Regexp.new(/([^,]*)[, ]{1,3}(.*)/), '\2 - \1'] ].tap {|arr|
             arr.insert(-1, *Array(@filter_opts.delete(:substitutions))) if @filter_opts.has_key? :substitutions
           },
