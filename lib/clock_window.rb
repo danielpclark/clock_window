@@ -26,12 +26,12 @@ module ClockWindow
     def active_window
       # Choose script to execute and format output to just window name
       case @os
-      when /linux/i 
+      when /linux/i
         exe = "xprop -id $(xprop -root 32x '\t$0' _NET_ACTIVE_WINDOW | cut -f 2) _NET_WM_NAME"
         format = ->str{ str.match(/.*\"(.*)\"\n\z/)[1][0..60] }
         [exe, format]
       else
-        raise "Not implemented"
+        raise "Not implemented for #{@os}"
       end
     end
   end
