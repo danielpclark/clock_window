@@ -5,7 +5,7 @@ A minimalist script to keep track of how long each window is active.  Measured i
 
 The output will look quite nice in any text editor aligned by the colon separator.
 
-**Linux** compatible.
+**Linux** & **Mac** compatible.
 
 Output looks like:
 ```
