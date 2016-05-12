@@ -3,11 +3,13 @@
 [![Code Triagers Badge](http://www.codetriage.com/danielpclark/clock_window/badges/users.svg)](http://www.codetriage.com/danielpclark/clock_window)
 
 # Clock Window
+[![OS Support](https://github.com/danielpclark/clock_window/blob/master/assets/mac-lin.png)]()
+
+**Mac** & **Linux** compatible.
+
 A minimalist script to keep track of how long each window is active.  Measured in quarter minutes.  Hash builds until you kill the script with CTRL-C at which point it writes out the log file.  This script <del>adds no extra CPU load</del> will not raise the CPUs temperature indicating minimal CPU usage.
 
 The output will look quite nice in any text editor aligned by the colon separator.
-
-**Linux** & **Mac** compatible.
 
 Output looks like:
 ```
