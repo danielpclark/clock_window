@@ -25,7 +25,7 @@ class ClockWindowTest < Minitest::Test
 
     it "formats correctly for Mac OS" do
       _, format = mac.active_window
-      _(format.call("Firefox, (1337) Twitter")).must_equal "(1337) Twitter - Firefox"
+      _(format.call("(1337) Twitter - Firefox\n")).must_equal "(1337) Twitter - Firefox"
     end
 
     it "crops to the default" do

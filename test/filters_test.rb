@@ -6,7 +6,7 @@ class ClockWindow::FiltersTest < Minitest::Test
       mac = ClockWindow::ClockIt.new(filter_opts: {no_notify: true}).instance_eval { @os_cmd }
       mac.instance_eval { @os = "darwin" }
       _, format = mac.active_window
-      _(format.call("Firefox, (1337) Twitter")).must_equal "Twitter - Firefox"
+      _(format.call("(1337) Twitter - Firefox")).must_equal "Twitter - Firefox"
 
       linux = ClockWindow::ClockIt.new(filter_opts: {no_notify: true}).instance_eval { @os_cmd }
       linux.instance_eval { @os = "linux-gnu" }
@@ -18,7 +18,7 @@ class ClockWindow::FiltersTest < Minitest::Test
       mac = ClockWindow::ClockIt.new(filter_opts: {substitutions: [[/wit/,'zzz']]}).instance_eval { @os_cmd }
       mac.instance_eval { @os = "darwin" }
       _, format = mac.active_window
-      _(format.call("Firefox, (1337) Twitter")).must_equal "(1337) Tzzzter - Firefox"
+      _(format.call("(1337) Twitter - Firefox")).must_equal "(1337) Tzzzter - Firefox"
 
       linux = ClockWindow::ClockIt.new(filter_opts: {matches: [/\A.../]}).instance_eval { @os_cmd }
       linux.instance_eval { @os = "linux-gnu" }
