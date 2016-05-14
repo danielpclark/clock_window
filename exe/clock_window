@@ -29,7 +29,8 @@ if opts[:help]
   exit
 else
   puts opts.to_s.partition("\n\n").first
-  puts "\nStarting active window tracking!"
+  puts "\nPress CTRL-C to exit the script."
+  puts "Starting active window tracking!"
 end 
 
 dir_name, _, file_name = opts[:output].to_s.rpartition(File::SEPARATOR)
