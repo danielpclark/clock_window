@@ -15,12 +15,22 @@ usage: clock_window [options]
 BANNER
   o.bool "-c", "--clean", "Use all known name filters"
   o.string "-o", "--output", "File/directory output in strftime"
-  o.bool "-e", "--eager", "Use strftime of time at start of script"
-  o.on "--version", 'print the version' do
+  o.bool "-e", "--eager", "Use strftime of time at start of script\n"
+
+  o.on "--version", "Print the version" do
     puts ClockWindow::VERSION
     exit
   end
+  o.bool "-h", "--help", "This help menu\n\n"
 end
+
+if opts[:help]
+  puts opts
+  exit
+else
+  puts opts.to_s.partition("\n\n").first
+  puts "\nStarting active window tracking!"
+end 
 
 dir_name, _, file_name = opts[:output].to_s.rpartition(File::SEPARATOR)
 file_name = "timelog.json" if file_name.empty?
