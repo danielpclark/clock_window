@@ -6,7 +6,7 @@ require 'neatjson'
 require 'clock_window'
 
 opts = Slop.parse do |o|
-  o.banner <<-BANNER
+  o.banner = <<-BANNER
 Clock Window - "Clock your desktop activity!"
 Copyright (c) 2016 Daniel P. Clark via the MIT License
 Version: #{ClockWindow::VERSION}
@@ -16,6 +16,10 @@ BANNER
   o.bool "-c", "--clean", "Use all known name filters"
   o.string "-o", "--output", "File/directory output in strftime"
   o.bool "-e", "--eager", "Use strftime of time at start of script"
+  o.on "--version", 'print the version' do
+    puts ClockWindow::VERSION
+    exit
+  end
 end
 
 dir_name, _, file_name = opts[:output].to_s.rpartition(File::SEPARATOR)
@@ -33,9 +37,10 @@ begin
 ensure
   @hash = {"*---------- WINDOW NAME ----------*" => "minutes"}.merge(@hash)
   @time ||= Time.now
-  dir = FileUtils.mkdir_p(@time.strftime(dir_name)).first
+  dir = @time.strftime(dir_name)
+  FileUtils.mkdir_p(dir) unless dir.empty?
   file = @time.strftime(file_name)
-  File.open("#{dir}#{File::SEPARATOR if dir}#{file}","w") do |f|
+  File.open("#{dir}#{File::SEPARATOR unless dir.empty?}#{file}","w") do |f|
     f.write(JSON.neat_generate(@hash,aligned:true,around_colon:1))
   end
 end
