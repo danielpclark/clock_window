@@ -1,17 +1,41 @@
 #!/usr/bin/env ruby
 
+require 'fileutils'
+require 'slop'
 require 'neatjson'
 require 'clock_window'
+
+opts = Slop.parse do |o|
+  o.banner <<-BANNER
+Clock Window - "Clock your desktop activity!"
+Copyright (c) 2016 Daniel P. Clark via the MIT License
+Version: #{ClockWindow::VERSION}
+
+usage: clock_window [options]
+BANNER
+  o.bool "-c", "--clean", "Use all known name filters"
+  o.string "-o", "--output", "File/directory output in strftime"
+  o.bool "-e", "--eager", "Use strftime of time at start of script"
+end
+
+dir_name, _, file_name = opts[:output].to_s.rpartition(File::SEPARATOR)
+file_name = "timelog.json" if file_name.empty?
+
+@time = Time.now if opts[:eager]
 @hash = {}
 begin
   loop do
-    x = ClockWindow::ClockIt.new.active_window
+    filter_opts = opts.clean? ? {filter_opts: {no_notify: true}} : {}
+    x = ClockWindow::ClockIt.new(**filter_opts).active_window
     @hash[x] = @hash[x].to_f + 0.25
     sleep 15
   end
 ensure
   @hash = {"*---------- WINDOW NAME ----------*" => "minutes"}.merge(@hash)
-  File.open("timelog.json","w") do |f|
+  @time ||= Time.now
+  dir = FileUtils.mkdir_p(@time.strftime(dir_name)).first
+  file = @time.strftime(file_name)
+  File.open("#{dir}#{File::SEPARATOR if dir}#{file}","w") do |f|
     f.write(JSON.neat_generate(@hash,aligned:true,around_colon:1))
   end
 end
