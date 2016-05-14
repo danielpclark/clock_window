@@ -7,7 +7,10 @@
 
 **Mac** & **Linux** compatible.
 
-A minimalist script to keep track of how long each window is active.  Measured in quarter minutes.  Hash builds until you kill the script with CTRL-C at which point it writes out the log file.  This script <del>adds no extra CPU load</del> will not raise the CPUs temperature indicating minimal CPU usage.
+A minimalist script to keep track of how long each window is active.
+Measured in quarter minutes.  Hash builds until you kill the script with CTRL-C
+at which point it writes out the log file.  This script <del>adds no extra CPU load</del>
+will not raise the CPUs temperature indicating minimal CPU usage.
 
 The output will look quite nice in any text editor aligned by the colon separator.
 
@@ -28,7 +31,29 @@ Output looks like:
 gem install clock_window
 ```
 
-To execute just run `clock_window` .  If you put this script in your executable path then the **timelog.json** file should appear in whatever folder you run it from.
+# Usage
+
+The `clock_window` script now accepts command line parameters.
+
+```
+usage: clock_window [options]
+
+    -c, --clean   Use all known name filters
+    -o, --output  File/directory output in strftime
+    -e, --eager   Use strftime of time at start of script
+
+    --version     Print the version
+    -h, --help    This help menu
+```
+
+And to save the file in a `year-month/day_of_year.json` format you can execute the script with.
+
+```
+clock_window -ceo "%Y-%m/%j.json"
+```
+
+For more customizable date formats see the [documentation for strftime](http://apidock.com/ruby/DateTime/strftime).
+Default file output name is `timelog.json`.
 
 # Contributing
 
